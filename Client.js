@@ -1,19 +1,30 @@
 const net = require('net');
+const readline = require('readline');
 
- const client = net.createConnection({
-    port:5000,host:'localhost'},
-() => {
-     console.log("Connected to Server");
-
-     client.write("hello Server");
-
-}
+const client = net.createConnection(
+  { host: '127.0.0.1', port: 9000 },
+  () => {
+    console.log("Connected to chat server");
+  }
 );
 
 client.on('data', (data) => {
-      console.log("Server says:", data.toString());
-})
+  process.stdout.write(data.toString());
+});
 
 client.on('end', () => {
-    console.log("Disconnected from server");
+  console.log("\nDisconnected from server");
+});
+
+client.on('error', (err) => {
+  console.log("Client error:", err.message);
+});
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.on('line', (input) => {
+  client.write(input + "\n");
 });
