@@ -13,11 +13,13 @@ const server = net.createServer((socket) => {
     broadcast(`${socket.name}: ${data}`, socket);
   });
 
+  
   socket.on('end', () => {
     clients.splice(clients.indexOf(socket), 1);
     broadcast(`${socket.name} left the chat\n`);
     console.log(socket.name, "disconnected");
   });
+
 
  socket.on('error', (err) => {
   if (err.code === 'ECONNRESET') {
